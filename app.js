@@ -3,7 +3,7 @@ const app = express()
 
 //EJECUCIÓN
 const Contenedor = require("./Contenedor.js")
-let containerOne= new Contenedor('productos.txt')
+let containerOne = new Contenedor('productos.txt')
 
 const init = async () => {
     console.log('================= AGREGO ELEMENTOS INICIALES =================')
@@ -19,11 +19,21 @@ app.listen(process.env.PORT || 8080)
 //RUTAS
 app.get('/', (req,res) => {
     console.log("Get request")
-    res.send("Saludos")
+    res.send("<h1>Esta es la página principal</h1>")
 })
 
-app.get('/productos', (req,res) => {
-    res.send("Productos", products)
+app.get('/productos', async (req,res) => {
+    try {
+        const allProducts = await containerOne.getAll()
+        let titleProducts = []
+        JSON.parse(allProducts).forEach(element => {
+            titleProducts.push(element.title)
+        });
+        res.send("<h2>Los productos disponibles son los siguientes:</h2>" + titleProducts)
+    } catch (error) {
+        res.send("Error geting products")
+    }
+    
 })
 
 app.get('/productoRandom', (req,res) => {
