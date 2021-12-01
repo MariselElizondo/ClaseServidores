@@ -6,7 +6,8 @@ const Contenedor = require("./Contenedor.js")
 let containerOne = new Contenedor('productos.txt')
 let allProducts
 
-app.use(express.urlencoded({extended:true}))
+//app.use(express.urlencoded({extended:true}))
+app.use(express.json())
 
 const getAllProducts = async () => {
     allProducts = await containerOne.getAll(); 
@@ -28,17 +29,23 @@ router.get('/:id', async (req, res) => {
     res.send(product)
 })
 
-router.post('', (req, res) => {
-    res.send("Recibe y agrega un producto, y lo devuelve con su id asignado")
+router.post('', async (req, res) => {
+    await containerOne.save(req.body)
+    console.log("Recibe, agrega un producto, y lo devuelve con su id asignado")
+    res.json(req.body)
 })
 
 router.put('/:id', (req, res) => {
+    let myId = req.params.id
     res.send("Recibe y actualiza un producto segun su id")
 })
 
-router.delete('/:id', (req, res) => {
-    res.send("Elimina producto segun su id")
+router.delete('/:id', async(req, res) => {
+    let myId = req.params.id
+    await containerOne.deleteById(+myId)
+    res.send("Elimina un producto segun su id")
 })
+
 
 
 
