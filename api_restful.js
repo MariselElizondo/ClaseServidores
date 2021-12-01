@@ -14,6 +14,18 @@ const getAllProducts = async () => {
 }
 getAllProducts()
 
+
+//MIDDLEWARES
+const validateProductExists = async(req, res, next) => { //Al que indiquemos
+    const myId = req.params.id
+    const exist = await containerOne.getById(+myId)
+    if(exist){
+        next()
+    }else {
+        res.send({error: 'producto no encontrado'})
+    }
+}
+
 //RUTA BASE
 app.use('/api/productos', router)
 
@@ -23,7 +35,7 @@ router.get('', async(req, res) => {
     res.send(JSON.parse(allProducts))
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateProductExists, async (req, res) => {
     let myId = req.params.id
     const product = await containerOne.getById(+myId)
     res.send(product)
@@ -35,15 +47,15 @@ router.post('', async (req, res) => {
     res.json(req.body)
 })
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validateProductExists, async(req, res) => {
     let myId = req.params.id
     res.send("Recibe y actualiza un producto segun su id")
 })
 
-router.delete('/:id', async(req, res) => {
-    let myId = req.params.id
+router.delete('/:id', validateProductExists, async(req, res) => {
+    const myId = req.params.id
     await containerOne.deleteById(+myId)
-    res.send("Elimina un producto segun su id")
+    res.send("Eliminado")
 })
 
 
