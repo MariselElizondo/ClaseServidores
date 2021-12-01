@@ -6,15 +6,9 @@ const app = express()
 const router = Router()
 const Contenedor = require("./Contenedor.js")
 let containerOne = new Contenedor('productos.txt')
-let allProducts
 
 app.use(express.json())
 app.use(express.urlencoded({extend:true}))
-
-const getAllProducts = async () => {
-    allProducts = await containerOne.getAll(); 
-}
-getAllProducts()
 
 //MIDDLEWARES
 const validateProductExists = async(req, res, next) => { //Al que indiquemos
@@ -32,6 +26,7 @@ app.use('/api/productos', router)
 
 //RUTAS
 router.get('', async(req, res) => {
+    const allProducts = await containerOne.getAll(); 
     res.send(JSON.parse(allProducts))
 })
 
