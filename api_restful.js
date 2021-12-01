@@ -2,10 +2,11 @@ const express = require('express')
 const { Router } = express
 const app = express()
 const router = Router()
-const PORT = 8080
 const Contenedor = require("./Contenedor.js")
 let containerOne = new Contenedor('productos.txt')
 let allProducts
+
+app.use(express.urlencoded({extended:true}))
 
 const getAllProducts = async () => {
     allProducts = await containerOne.getAll(); 
@@ -21,8 +22,10 @@ router.get('', async(req, res) => {
     res.send(JSON.parse(allProducts))
 })
 
-router.get('/:id', (req, res) => {
-    res.send("Devuelve un producto")
+router.get('/:id', async (req, res) => {
+    let myId = req.params.id
+    const product = await containerOne.getById(+myId)
+    res.send(product)
 })
 
 router.post('', (req, res) => {
@@ -43,4 +46,4 @@ router.delete('/:id', (req, res) => {
 app.use(express.static(__dirname + '/public')) //Entre paréntesis la ruta
 app.use('/static', express.static('datas')) */
 
-app.listen(PORT)
+app.listen(process.env.PORT || 8080)
