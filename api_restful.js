@@ -42,8 +42,11 @@ router.post('', async (req, res) => {
 })
 
 router.put('/:id', validateProductExists, async(req, res) => {
-    let myId = req.params.id
-    res.send({"Response":"Recibe y actualiza un producto segun su id"})
+    const myId = req.params.id
+    console.log(req.body)
+    await containerOne.deleteById(+myId)
+    const updatedProduct = await containerOne.saveWithId(req.body, +myId)
+    res.send(updatedProduct)
 })
 
 router.delete('/:id', validateProductExists, async(req, res) => {

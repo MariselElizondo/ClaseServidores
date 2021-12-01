@@ -12,7 +12,10 @@
 <body>
 
     <h1>Formulario</h1>
-    <form action="/" method="post" >
+    <hr>
+    <h3>Crear</h3>
+
+    <form action="/api/productos" method="post" >
         <label class="col-3" name="form-title">Titulo</label>
         <input type="text" name="inputTitle"></br>
 
@@ -21,6 +24,26 @@
 
         <label class="col-3" name="form-thumbnail">Thumbnail (url)</label>
         <input type="text" name="inputThumbnail"></br>
+
+        <label class="col-3" name="form-send">Enviar Producto</label>
+        <button class="send-button" type="submit">Enviar</button>
+    </form>
+
+    <hr>
+    <h3>Crear o actualizar</h3>
+    
+    <form action="/api/productos/:id" method="put" >
+        <label class="col-3" name="form-title">Titulo</label>
+        <input type="text" name="inputTitle"></br>
+
+        <label class="col-3" name="form-price">Price</label>
+        <input type="text" name="inputPrice"></br>
+
+        <label class="col-3" name="form-thumbnail">Thumbnail (url)</label>
+        <input type="text" name="inputThumbnail"></br>
+
+        <label class="col-3" name="form-id">ID</label>
+        <input type="number" name="inputId"></br>
 
         <label class="col-3" name="form-send">Enviar Producto</label>
         <button class="send-button" type="submit">Enviar</button>

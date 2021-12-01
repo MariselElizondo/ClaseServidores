@@ -28,6 +28,28 @@ class Contenedor {
         }
     }
 
+    //SAVE WITH ID
+    async saveWithId(object, id) {
+        try {
+            let theContent
+            const response = await this.getAll()
+            if(response){
+                theContent = JSON.parse(response)            
+            } else {
+                theContent = JSON.parse('[]')
+            }
+            object.id = id
+            theContent.push(object)
+            await fs.promises.writeFile(this.fileName, JSON.stringify(theContent))
+            console.log('El objeto ', JSON.stringify(object), ' se ha agregado satisfactoriamente sobre ', this.fileName)
+            return object              
+        }
+        catch (error) {
+            console.log('Error en save(): ', error)
+            return null
+        }
+    }
+
     //GET BY ID
     async getById(number) {
         try {
