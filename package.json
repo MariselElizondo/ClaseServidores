@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node app_file.js",
+    "start": "nodemon api_restful.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
