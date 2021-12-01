@@ -36,7 +36,7 @@ router.get('/:id', validateProductExists, async (req, res) => {
     res.json(product)
 })
 
-app.post('/api/productos', async (req, res) => {
+router.post('', async (req, res) => {
     await containerOne.save(req.body)
     res.json(req.body)
 })
