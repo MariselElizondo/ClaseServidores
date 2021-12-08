@@ -33,7 +33,7 @@ const refreshProducts = async(req, res, next) => { //Al que indiquemos
     if(listOfProducts){
         next()
     }else {
-        res.send({error: 'No hay productos'})
+        res.send({error: 'Error al intentar objeter los productos'})
     }
 }
 
