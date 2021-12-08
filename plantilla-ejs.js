@@ -49,39 +49,8 @@ app.get('/list', refreshProducts, (req, res) => {
 
 app.post("/", async (req, res) => {
     await containerOne.save(req.body)
-
     return res.redirect("/list")
 }) 
-
-/* 
-
-//RUTAS
-router.get('', async(req, res) => {
-    const allProducts = await containerOne.getAll(); 
-    res.send(JSON.parse(allProducts))
-})
-
-router.get('/:id', validateProductExists, async (req, res) => {
-    let myId = req.params.id
-    const product = await containerOne.getById(+myId)
-    res.json(product)
-}) */
-
-
-
-/* router.put('/:id', validateProductExists, async(req, res) => {
-    const myId = req.params.id
-    console.log(req.body)
-    await containerOne.deleteById(+myId)
-    const updatedProduct = await containerOne.saveWithId(req.body, +myId)
-    res.send(updatedProduct)
-})
-
-router.delete('/:id', validateProductExists, async(req, res) => {
-    const myId = req.params.id
-    await containerOne.deleteById(+myId)
-    res.send({"Response":"eliminado"})
-}) */
 
 //STATICS FILE
 app.use(express.static(__dirname + '/public'))
