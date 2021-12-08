@@ -16,12 +16,14 @@
     <% if (list.length === 0) { %>
     <p>No hay productos</p>
     <% } else { %>
-    <table>
-        <tr>
-            <th>Nombre</th>
-            <th>Precio</th>
-            <th>Foto</th>
-        </tr>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Foto</th>
+            </tr>
+        </thead>
         <% list.map((product) => { %>
             <tr>
                 <td><%= product.title %></td>

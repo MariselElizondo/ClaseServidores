@@ -47,12 +47,11 @@ app.get('/list', refreshProducts, (req, res) => {
     })
 })
 
-router.post("/", async (req, res) => {
-    console.log(req.query)
+app.post("/", async (req, res) => {
     await containerOne.save(req.body)
 
     return res.redirect("/list")
-})
+}) 
 
 /* 
 
