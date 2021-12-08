@@ -1,5 +1,4 @@
 const express = require('express')
-const multer = require('multer')
 const { Router } = express
 
 const app = express()
@@ -46,6 +45,13 @@ app.get('/list', refreshProducts, (req, res) => {
     return res.render('list', {
         list: JSON.parse(listOfProducts)
     })
+})
+
+router.post("/", async (req, res) => {
+    console.log(req.query)
+    await containerOne.save(req.body)
+
+    return res.redirect("/list")
 })
 
 /* 
