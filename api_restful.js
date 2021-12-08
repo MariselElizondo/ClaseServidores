@@ -6,7 +6,7 @@ const app = express()
 const router = Router()
 const Contenedor = require("./Contenedor.js")
 let containerOne = new Contenedor('productos.txt')
-let listOfProducts = [{"title":"Escuadra","price":123.45,"thumbnail":"https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png","id":1},{"title":"Calculadora","price":234.56,"thumbnail":"https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png","id":2},{"title":"Globo Terráqueo","price":345.67,"thumbnail":"https://cdn3.iconfinder.com/data/icons/education-209/64/globe-earth-geograhy-planet-school-256.png","id":3}]
+let listOfProducts
 
 //CONFIGURACIONES
 app.use('/api/productos', router)
@@ -28,24 +28,23 @@ const validateProductExists = async(req, res, next) => { //Al que indiquemos
     }
 }
 
-const getProducts = async(req, res, next) => { //Al que indiquemos
-    const myId = req.params.id
-    const exist = await containerOne.getAll()
-    if(exist){
-        products = exist
+const refreshProducts = async(req, res, next) => { //Al que indiquemos
+    listOfProducts = await containerOne.getAll()
+    if(listOfProducts){
         next()
     }else {
-        res.send({error: 'producto no encontrado'})
+        res.send({error: 'No hay productos'})
     }
 }
+
 
 app.get('/', (req, res) => {
     return res.render('form')
 })
 
-app.get('/list', (req, res) => {
+app.get('/list', refreshProducts, (req, res) => {
     return res.render('list', {
-        list: listOfProducts
+        list: JSON.parse(listOfProducts)
     })
 })
 

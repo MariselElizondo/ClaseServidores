@@ -13,14 +13,13 @@
 
     <h1>Vista de Productos</h1>
     <hr>
-
     <table>
         <tr>
             <th>Nombre</th>
             <th>Precio</th>
             <th>Foto</th>
         </tr>
-        <% list.forEach((product) => { %>
+        <% list?.map((product) => { %>
             <tr>
                 <td><%= product.title %></td>
                 <td><%= product.price %></td>
