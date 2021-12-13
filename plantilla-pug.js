@@ -41,8 +41,8 @@ app.get('/', (req, res) => {
     //return res.render('form')
 })
 
-app.get('/hola', (req, res) => {
-    return res.render('hola.pug', {
+app.get('/form-pug', (req, res) => {
+    return res.render('form-pug.pug', {
         mensaje: 'bayhgd buya aud guy as dgauy'
     })
 })
