@@ -5,13 +5,11 @@ socket.on('product', data => {
 })
 
 function render(data) {
-    data.forEach(info => {
-        $("#spc").append(`
-        <div>
-            <strong>${info.title}</strong>
-            <em>${info.price}</em>
-        </div>`)
-    })
+    $("#new-line").append(`
+        <td> ${data.title} </td>
+        <td> ${data.price} </td>
+        <td><img src="${data.thumbnail} " width="100px"></td>
+    `)
 }
 
 

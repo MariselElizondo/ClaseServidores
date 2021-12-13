@@ -10,8 +10,8 @@ let containerOne = new Contenedor('productos.txt')
 let listOfProducts = []
 
 //CONFIGURACIONES
-/* app.use(express.json())
-app.use(express.urlencoded({extend:true})) */
+app.use(express.json())
+app.use(express.urlencoded({extend:true}))
 app.use(express.static(__dirname + '/public'))
 app.use(express.static(__dirname + '/views'))
 app.set('views', './views')
@@ -28,7 +28,7 @@ ioServer.on('connection', (socket) => {
     socket.on('new-product', data => {
         JSON.parse(listOfProducts).push(data)
         //containerOne.save(data)
-        ioServer.sockets.emit('product', [data])
+        ioServer.sockets.emit('product', data)
     })
 })
 
