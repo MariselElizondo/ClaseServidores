@@ -26,10 +26,8 @@ ioServer.on('connection', (socket) => {
     console.log("New user connected")
     socket.emit('product', [{author:"Marisel"}])
     socket.on('new-product', data => {
-        let listaParseada = JSON.parse(listOfProducts)
-        listaParseada.push(data)
-        console.log(listaParseada)
-        containerOne.save(data)
+        JSON.parse(listOfProducts).push(data)
+        //containerOne.save(data)
         ioServer.sockets.emit('product', [data])
     })
 })
