@@ -1,20 +1,24 @@
 const express = require('express')
 const { Router } = express
+const { Server: HttpServer } = require("http");
+const { Server: IOServer } = require('socket.io')
 
 const app = express()
 const router = Router()
+const httpServer = new HttpServer(app)
+const ioServer = new IOServer(httpServer)
 const Contenedor = require("./Contenedor.js")
 let containerOne = new Contenedor('productos.txt')
 let listOfProducts
+const messages = []
 
 //CONFIGURACIONES
 app.use('/api/productos', router)
-
-app.set('views', './views')
-app.set('view engine', 'ejs')
-
 app.use(express.json())
 app.use(express.urlencoded({extend:true}))
+app.use(express.static('./public'))
+app.set('views', './views')
+app.set('view engine', 'ejs')
 
 //MIDDLEWARES
 const validateProductExists = async(req, res, next) => { //Al que indiquemos
@@ -36,14 +40,28 @@ const refreshProducts = async(req, res, next) => { //Al que indiquemos
     }
 }
 
-
-app.get('/', (req, res) => {
-    //return res.render('form')
+//SERVIDOR
+httpServer.listen(process.env.PORT || 3000, () => {
+    console.log("SERVER ON");
 })
 
-app.get('/form-pug', (req, res) => {
-    return res.render('form-pug.pug', {
-        mensaje: 'bayhgd buya aud guy as dgauy'
+ioServer.on('connection', (socket) => {
+    console.log("New user")
+    socket.emit('messages', messages)
+    socket.on('new-message', data => {
+        messages.push(data)
+        ioServer.sockets.emit('messages', [data])
+    })
+})
+
+//RUTAS
+app.get('/', (req, res) => {
+    return res.render('form')
+})
+
+app.get('/list', refreshProducts, (req, res) => {
+    return res.render('list', {
+        list: JSON.parse(listOfProducts)
     })
 })
 
@@ -52,7 +70,6 @@ app.post("/", async (req, res) => {
     return res.redirect("/list")
 }) 
 
-//STATICS FILE
+//
 app.use(express.static(__dirname + '/public'))
-
 app.listen(process.env.PORT || 8080)
