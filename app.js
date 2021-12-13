@@ -1,24 +1,35 @@
 const express = require('express')
-const { Router } = express
 const { Server: HttpServer } = require("http");
 const { Server: IOServer } = require('socket.io')
 
 const app = express()
-const router = Router()
 const httpServer = new HttpServer(app)
 const ioServer = new IOServer(httpServer)
 const Contenedor = require("./Contenedor.js")
 let containerOne = new Contenedor('productos.txt')
-let listOfProducts
-const messages = []
+let listOfProducts = []
 
 //CONFIGURACIONES
-app.use('/api/productos', router)
-app.use(express.json())
-app.use(express.urlencoded({extend:true}))
-app.use(express.static('./public'))
+/* app.use(express.json())
+app.use(express.urlencoded({extend:true})) */
+app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/views'))
 app.set('views', './views')
 app.set('view engine', 'ejs')
+
+//SERVIDOR
+httpServer.listen(process.env.PORT || 8080, () => {
+    console.log("SERVER ON");
+})
+
+ioServer.on('connection', (socket) => {
+    console.log("New user connected")
+    socket.emit('product', [{author:"Marisel"}])
+    socket.on('new-product', data => {
+        (JSON.parse(listOfProducts)).push(data)
+        ioServer.sockets.emit('product', [data])
+    })
+})
 
 //MIDDLEWARES
 const validateProductExists = async(req, res, next) => { //Al que indiquemos
@@ -40,36 +51,17 @@ const refreshProducts = async(req, res, next) => { //Al que indiquemos
     }
 }
 
-//SERVIDOR
-httpServer.listen(process.env.PORT || 3000, () => {
-    console.log("SERVER ON");
-})
-
-ioServer.on('connection', (socket) => {
-    console.log("New user")
-    socket.emit('messages', messages)
-    socket.on('new-message', data => {
-        messages.push(data)
-        ioServer.sockets.emit('messages', [data])
-    })
-})
-
 //RUTAS
-app.get('/', (req, res) => {
-    return res.render('form')
-})
-
-app.get('/list', refreshProducts, (req, res) => {
-    return res.render('list', {
+app.get('/', refreshProducts,  (req, res) => {
+    return res.render('form', {
         list: JSON.parse(listOfProducts)
     })
 })
 
 app.post("/", async (req, res) => {
     await containerOne.save(req.body)
-    return res.redirect("/list")
+    
 }) 
 
-//
-app.use(express.static(__dirname + '/public'))
-app.listen(process.env.PORT || 8080)
+
+

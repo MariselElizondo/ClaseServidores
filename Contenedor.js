@@ -69,9 +69,9 @@ class Contenedor {
     async getAll() {
         try {
             const response = await fs.promises.readFile(this.fileName,'utf-8')
-            response.length === 0 
+            /* response.length === 0 
             ? console.log(this.fileName, ' está vacío')
-            : console.log(JSON.parse(response))
+            : console.log(JSON.parse(response)) */
             return response
         } catch (error) {
             console.log('Error en getAll(): ', error)
