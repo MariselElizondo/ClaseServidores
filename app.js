@@ -19,12 +19,12 @@ app.set('view engine', 'ejs')
 
 //SERVIDOR
 httpServer.listen(process.env.PORT || 8080, () => {
-    console.log("SERVER ON");
+    console.log("SERVER ON PORT 8080");
 })
 
 ioServer.on('connection', (socket) => {
     console.log("New user connected")
-    socket.emit('product', [{author:"Marisel"}])
+    
     socket.on('new-product', data => {
         JSON.parse(listOfProducts).push(data)
         //containerOne.save(data)
@@ -63,6 +63,3 @@ app.post("/", async (req, res) => {
     await containerOne.save(req.body)
     
 }) 
-
-
-
