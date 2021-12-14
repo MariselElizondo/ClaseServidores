@@ -4,6 +4,10 @@ socket.on('product', data => {
     render(data)
 })
 
+socket.on('lista-ingresando', data => {
+    console.log('Lista de productos a representar en la vista: ', data)
+})
+
 function render(data) {
     $("#new-line").append(`
     <tr>

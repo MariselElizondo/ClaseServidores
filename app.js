@@ -24,7 +24,7 @@ httpServer.listen(process.env.PORT || 8080, () => {
 
 ioServer.on('connection', (socket) => {
     console.log("New user connected")
-    
+    socket.emit('lista-ingresando', listOfProducts)
     socket.on('new-product', data => {
         (JSON.parse(listOfProducts)).push(data)
         containerOne.save(data)
