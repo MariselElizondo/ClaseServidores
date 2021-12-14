@@ -26,8 +26,8 @@ ioServer.on('connection', (socket) => {
     console.log("New user connected")
     
     socket.on('new-product', data => {
-        JSON.parse(listOfProducts).push(data)
-        //containerOne.save(data)
+        (JSON.parse(listOfProducts)).push(data)
+        containerOne.save(data)
         ioServer.sockets.emit('product', data)
     })
 })

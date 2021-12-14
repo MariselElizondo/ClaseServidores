@@ -6,10 +6,11 @@ socket.on('product', data => {
 
 function render(data) {
     $("#new-line").append(`
+    <tr>
         <td> ${data.title} </td>
         <td> ${data.price} </td>
         <td><img src="${data.thumbnail} " width="100px"></td>
-    `)
+    </tr>`)
 }
 
 

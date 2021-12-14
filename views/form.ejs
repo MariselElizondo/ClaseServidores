@@ -39,14 +39,15 @@
                 <th>Foto</th>
             </tr>
         </thead>
-        <% list.map((product) => { %>
-            <tr>
-                <td><%= product.title %></td>
-                <td><%= product.price %></td>
-                <td><img src="<%= product.thumbnail %>" width="100px"></td>
-            </tr>
-        <% }) %>
-            <tr id="new-line" ></tr>
+        <tbody id="new-line">
+            <% list.map((product) => { %>
+                <tr>
+                    <td><%= product.title %></td>
+                    <td><%= product.price %></td>
+                    <td><img src="<%= product.thumbnail %>" width="100px"></td>
+                </tr>
+            <% }) %>
+        </tbody>
     </table>
     <% } %>
     
