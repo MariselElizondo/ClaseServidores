@@ -24,3 +24,7 @@ h2 {
     border-radius: 10px;
     box-shadow: 1px 5px 10px black;
 }
+
+#box-msg {
+    margin:0px
+}

@@ -54,15 +54,12 @@
     <div class="container-sc">
         <h2>Centro de Mensajes</h2>
         <hr>
-        <form id="myForm-msg" action="/" method="post">
+        <form id="myForm-login" action="/" method="post">
             <input id="spc-mail" name="mail" placeholder="Ingrese un mail"></br></br>
-            <% if (user == null) { %>
-                <p>Inicie sesión para poder chatear</p>
-            <% } else { %>
-                <p id="box-msg"></p>
-                <input id="spc-mail" name="msg" placeholder="Ingrese un mensaje">
-                
-            <% } %>
+            <input id="btn-iniciar" class="send-button" type="submit" value='Ingresar'>
+        </form>
+        <form id="myForm-msg" action="/" method="post"><div id="chat-msg"></div></br>
+            <div id="box-msg"></div>
             <input id="btn-enviar-msg" class="send-button" type="submit" value='Enviar!'>
         </form>
     </div>

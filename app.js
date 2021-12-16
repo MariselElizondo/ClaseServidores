@@ -8,7 +8,6 @@ const ioServer = new IOServer(httpServer)
 const Contenedor = require("./Contenedor.js")
 let containerOne = new Contenedor('productos.txt')
 let listOfProducts = []
-let logueado
 
 //CONFIGURACIONES
 app.use(express.json())
@@ -24,7 +23,6 @@ httpServer.listen(process.env.PORT || 8080, () => {
 })
 
 ioServer.on('connection', (socket) => {
-    logueado = null
     console.log("New user connected")
     socket.emit('lista-ingresando', listOfProducts)
     socket.on('new-product', data => {
@@ -33,9 +31,11 @@ ioServer.on('connection', (socket) => {
         ioServer.sockets.emit('product', data)
     })
     socket.on('new-user-mail', data => {
-        logueado = data
-        console.log('hbsdusdvvftsuiiiiiii')
+        socket.emit('open-chat', data)
     })
+    /* socket.on('send-msg', data => {
+        socket.emit('open-chat', data)
+    }) */
 })
 
 //MIDDLEWARES
@@ -61,8 +61,7 @@ const refreshProducts = async(req, res, next) => { //Al que indiquemos
 //RUTAS
 app.get('/', refreshProducts,  (req, res) => {
     return res.render('form', {
-        list: JSON.parse(listOfProducts),
-        user: logueado
+        list: JSON.parse(listOfProducts)
     })
 })
 
