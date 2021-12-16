@@ -10,6 +10,17 @@ let containerOne = new Contenedor('productos.txt')
 let listOfProducts = []
 let mail
 
+const fs = require('fs')
+
+async function saveChat(data) {
+    try {
+        await fs.promises.appendFile('chat.txt', JSON.stringify(data))           
+    }
+    catch (error) {
+        console.log('Error en al guardar el chat en el servidor: ', error)
+    }
+}
+
 //CONFIGURACIONES
 app.use(express.json())
 app.use(express.urlencoded({extend:true}))
@@ -38,6 +49,7 @@ ioServer.on('connection', (socket) => {
     })
     socket.on('chat-text', data => {
         let allData = {'mail': mail, 'data': data}
+        saveChat(allData)
         ioServer.sockets.emit('new-msg-chat', allData)
     })
 })

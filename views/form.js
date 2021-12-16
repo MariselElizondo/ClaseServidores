@@ -46,7 +46,7 @@ function renderNewChat(data) {
     const now = new Date();
     $("#box-msg").append(`
         <span class="blue-text text">${user}</span>
-        [<span class="red-text text">${now}</span>] :
+        [<span class="brown-text text">${now}</span>] :
         <span class="green-text text">${msg}</span>
         </br>
     `)
@@ -66,7 +66,6 @@ $("#myForm-login").submit( e => {
     e.preventDefault()
     const toSend = $("#spc-mail").val()
     socket.emit('new-user-mail', toSend)
-    console.log("login")
 })  
 
 $("#myForm-msg").submit( e => {
@@ -74,7 +73,7 @@ $("#myForm-msg").submit( e => {
     const isLogin = $("#spc-mail").val()
     if(isLogin.length === 0) {
         $("#box-msg").append(`
-        Debe ingresar un mail antes
+        <span class="brown-text text">Debe ingresar un mail antes<span></br>
         `)
     } else {
         const toSend = $("#spc-text").val()
