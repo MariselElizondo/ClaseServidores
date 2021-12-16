@@ -28,3 +28,16 @@ h2 {
 #box-msg, #chat-msg {
     margin:0px
 }
+
+.text {
+    margin: 0%;
+}
+
+.blue-text {
+    color: blue;
+    font-weight: 600; 
+}
+
+.red-text { color: red }
+
+.green-text { color: green }

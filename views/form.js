@@ -41,8 +41,14 @@ function renderMensaje(data) {
 }
 
 function renderNewChat(data) {
+    const user = data.mail
+    const msg = data.data
+    const now = new Date();
     $("#box-msg").append(`
-    ${JSON.stringify(data)} </br>
+        <span class="blue-text text">${user}</span>
+        [<span class="red-text text">${now}</span>] :
+        <span class="green-text text">${msg}</span>
+        </br>
     `)
 }
 
