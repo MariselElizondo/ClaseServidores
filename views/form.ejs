@@ -14,7 +14,7 @@
     <div class="container-sc">
         <h2>Ingrese un Producto</h2>
         <hr>
-        <form id="myForm" action="/" method="post">
+        <form id="myForm1" action="/" method="post">
             <label name="form-title">Nombre</label></br>
             <input id="spc-title" name="title"></br>
 
@@ -55,10 +55,15 @@
         <h2>Centro de Mensajes</h2>
         <hr>
         <form id="myForm-msg" action="/" method="post">
-            <label name="form-mail">Nombre</label></br>
-            <input id="spc-mail" name="mail"></br></br>
-            <p></p>
-            <input id="btn-enviar-msg" class="send-button" type="submit" value='Enviar'>
+            <input id="spc-mail" name="mail" placeholder="Ingrese un mail"></br></br>
+            <% if (user == null) { %>
+                <p>Inicie sesión para poder chatear</p>
+            <% } else { %>
+                <p id="box-msg"></p>
+                <input id="spc-mail" name="msg" placeholder="Ingrese un mensaje">
+                
+            <% } %>
+            <input id="btn-enviar-msg" class="send-button" type="submit" value='Enviar!'>
         </form>
     </div>
 
@@ -69,17 +74,3 @@
     <script src="form.js"></script>
 </body>
 </html>
-
-
-<!-- <h1>Chat de <em id="username"></em></h1>
-
-    <form id="myForm">
-        <input id="text" placeholder='Escribe'>
-
-        <input type="submit" value='Enviar'>
-    </form>
-    <div id='messages'></div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="index.js"></script> -->

@@ -1,14 +1,14 @@
 const socket = io.connect()
 
 socket.on('product', data => {
-    render(data)
+    renderProduct(data)
 })
 
 socket.on('lista-ingresando', data => {
     console.log('Lista de productos a representar en la vista: ', data)
 })
 
-function render(data) {
+function renderProduct(data) {
     $("#new-line").append(`
     <tr>
         <td> ${data.title} </td>
@@ -17,9 +17,18 @@ function render(data) {
     </tr>`)
 }
 
+function renderMensaje(data) {
+    $("#box-msg").append(`
+    <tr>
+        <td> ${data.mail} </td>
+        <td> ${data.msg} </td>
+        <td><img src="${data.thumbnail} " width="100px"></td>
+    </tr>`)
+}
 
-$("#myForm").submit( e => {
+$("#myForm1").submit( e => {
     e.preventDefault()
+    alert('bsuyhvsdufty')
     const newProduct = {
         title: $("#spc-title").val(),
         price: $("#spc-number").val(),
@@ -27,3 +36,9 @@ $("#myForm").submit( e => {
     }
     socket.emit('new-product', newProduct)
 }) 
+
+$("#myForm-msg").submit( e => {
+    e.preventDefault()
+    const toSend = $("#spc-mail").val()
+    socket.emit('new-user-mail', toSend)
+})  
