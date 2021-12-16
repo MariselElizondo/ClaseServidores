@@ -44,9 +44,10 @@ function renderNewChat(data) {
     const user = data.mail
     const msg = data.data
     const now = new Date();
+    const formatNow = `${now.getDate()}/${now.getMonth()}/${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()} `
     $("#box-msg").append(`
         <span class="blue-text text">${user}</span>
-        [<span class="brown-text text">${now}</span>] :
+        [<span class="brown-text text">${formatNow}</span>] :
         <span class="green-text text">${msg}</span>
         </br>
     `)
