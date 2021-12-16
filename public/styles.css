@@ -25,6 +25,6 @@ h2 {
     box-shadow: 1px 5px 10px black;
 }
 
-#box-msg {
+#box-msg, #chat-msg {
     margin:0px
 }

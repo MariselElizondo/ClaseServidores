@@ -4,6 +4,10 @@ socket.on('product', data => {
     renderProduct(data)
 })
 
+socket.on('new-msg-chat', data => {
+    renderNewChat(data)
+})
+
 socket.on('lista-ingresando', data => {
     console.log('Lista de productos a representar en la vista: ', data)
 })
@@ -23,9 +27,10 @@ function renderProduct(data) {
 
 function renderChat(data) {
     $("#chat-msg").append(`
-        <input id="spc-mail" name="msg" placeholder="Ingrese un mensaje"></input>
+        <input id="spc-text" name="msg" placeholder="Ingrese un mensaje"></input>
     `)
 }
+
 function renderMensaje(data) {
     $("#box-msg").append(`
     <tr>
@@ -33,6 +38,12 @@ function renderMensaje(data) {
         <td> ${data.msg} </td>
         <td><img src="${data.thumbnail} " width="100px"></td>
     </tr>`)
+}
+
+function renderNewChat(data) {
+    $("#box-msg").append(`
+    ${JSON.stringify(data)} </br>
+    `)
 }
 
 $("#myForm1").submit( e => {
@@ -54,15 +65,13 @@ $("#myForm-login").submit( e => {
 
 $("#myForm-msg").submit( e => {
     e.preventDefault()
-    console.log('asbdabdsgiu')
     const isLogin = $("#spc-mail").val()
     if(isLogin.length === 0) {
         $("#box-msg").append(`
         Debe ingresar un mail antes
         `)
     } else {
-        console.log('ya puede')
+        const toSend = $("#spc-text").val()
+        socket.emit('chat-text', toSend)
     }
-    /* const toSend = $("#spc-mail").val()
-    socket.emit('new-user-mail', toSend) */
 }) 

@@ -8,6 +8,7 @@ const ioServer = new IOServer(httpServer)
 const Contenedor = require("./Contenedor.js")
 let containerOne = new Contenedor('productos.txt')
 let listOfProducts = []
+let mail
 
 //CONFIGURACIONES
 app.use(express.json())
@@ -23,6 +24,7 @@ httpServer.listen(process.env.PORT || 8080, () => {
 })
 
 ioServer.on('connection', (socket) => {
+    mail = null
     console.log("New user connected")
     socket.emit('lista-ingresando', listOfProducts)
     socket.on('new-product', data => {
@@ -31,11 +33,13 @@ ioServer.on('connection', (socket) => {
         ioServer.sockets.emit('product', data)
     })
     socket.on('new-user-mail', data => {
+        mail = data
         socket.emit('open-chat', data)
     })
-    /* socket.on('send-msg', data => {
-        socket.emit('open-chat', data)
-    }) */
+    socket.on('chat-text', data => {
+        let allData = {'mail': mail, 'data': data}
+        ioServer.sockets.emit('new-msg-chat', allData)
+    })
 })
 
 //MIDDLEWARES
