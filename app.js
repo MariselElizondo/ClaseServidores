@@ -1,7 +1,10 @@
 const express = require('express')
 const { Server: HttpServer } = require("http");
 const { Server: IOServer } = require('socket.io')
+const { Router } = express
 
+const routerProductos = Router()
+const routerCarrito = Router()
 const app = express()
 const httpServer = new HttpServer(app)
 const ioServer = new IOServer(httpServer)
@@ -23,11 +26,17 @@ async function saveChat(data) {
 
 //CONFIGURACIONES
 app.use(express.json())
-app.use(express.urlencoded({extend:true}))
-app.use(express.static(__dirname + '/public'))
-app.use(express.static(__dirname + '/views'))
+app.use(express.urlencoded({extended: true}))
 app.set('views', './views')
 app.set('view engine', 'ejs')
+
+//STATICS FILE
+app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/views'))
+
+//RUTA BASE
+app.use('/api/productos', routerProductos)
+app.use('/api/carrito', routerCarrito)
 
 //SERVIDOR
 httpServer.listen(process.env.PORT || 8080, () => {
@@ -75,13 +84,42 @@ const refreshProducts = async(req, res, next) => { //Al que indiquemos
 }
 
 //RUTAS
-app.get('/', refreshProducts,  (req, res) => {
+
+/*********************** PRODUCTOS ***********************/
+/* routerProductos.get('/', refreshProducts,  (req, res) => {
     return res.render('form', {
         list: JSON.parse(listOfProducts)
     })
+}) */
+routerProductos.get('/', async(req, res) => {
+    const allProducts = await containerOne.getAll(); 
+    res.send(JSON.parse(allProducts))
 })
 
-app.post("/", async (req, res) => {
+routerProductos.get('/:id', validateProductExists, async (req, res) => {
+    let myId = req.params.id
+    const product = await containerOne.getById(+myId)
+    res.json(product)
+})
+
+routerProductos.post('/', async (req, res) => {
     await containerOne.save(req.body)
-    
-}) 
+    res.json(req.body)
+})
+
+routerProductos.put('/:id', validateProductExists, async(req, res) => {
+    const myId = req.params.id
+    console.log(req.body)
+    await containerOne.deleteById(+myId)
+    const updatedProduct = await containerOne.saveWithId(req.body, +myId)
+    res.send(updatedProduct)
+})
+
+routerProductos.delete('/:id', validateProductExists, async(req, res) => {
+    const myId = req.params.id
+    await containerOne.deleteById(+myId)
+    res.send({"Response":"eliminado"})
+})
+
+/************************ CARRITO ************************/
+
