@@ -91,6 +91,7 @@ const refreshProducts = async(req, res, next) => { //Al que indiquemos
         list: JSON.parse(listOfProducts)
     })
 }) */
+
 routerProductos.get('/', async(req, res) => {
     const allProducts = await containerOne.getAll(); 
     res.send(JSON.parse(allProducts))
@@ -123,3 +124,30 @@ routerProductos.delete('/:id', validateProductExists, async(req, res) => {
 
 /************************ CARRITO ************************/
 
+routerCarrito.post('/', async (req, res) => {
+    await containerOne.save(req.body)
+    res.json(req.body)
+})
+
+routerCarrito.delete('/:id', validateProductExists, async(req, res) => {
+    const myId = req.params.id
+    await containerOne.deleteById(+myId)
+    res.send({"Response":"eliminado"})
+})
+
+routerCarrito.get('/:id/productos', validateProductExists, async (req, res) => {
+    let myId = req.params.id
+    const product = await containerOne.getById(+myId)
+    res.json(product)
+})
+
+routerCarrito.post('/:id/productos', async (req, res) => {
+    await containerOne.save(req.body)
+    res.json(req.body)
+})
+
+routerCarrito.delete('/:id/productos/:id_prod', validateProductExists, async(req, res) => {
+    const myId = req.params.id
+    await containerOne.deleteById(+myId)
+    res.send({"Response":"eliminado"})
+})
