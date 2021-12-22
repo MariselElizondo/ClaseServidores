@@ -10,13 +10,14 @@ class Contenedor {
         try {
             let theContent
             const response = await this.getAll()
-            if(response){
+            if(response && response.length > 2){
                 theContent = JSON.parse(response),
                 object.id = theContent[theContent.length - 1].id +1                   
             } else {
                 theContent = JSON.parse('[]'),
                 object.id=  1
             }
+            object.timestamp = Date.now()
             theContent.push(object)
             await fs.promises.writeFile(this.fileName, JSON.stringify(theContent))
             console.log('El objeto ', JSON.stringify(object), ' se ha agregado satisfactoriamente sobre ', this.fileName)

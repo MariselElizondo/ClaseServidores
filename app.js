@@ -139,7 +139,7 @@ routerCarrito.delete('/:id', validateProductExists, async(req, res) => {
 routerCarrito.get('/:id/productos', validateProductExists, async (req, res) => {
     let myId = req.params.id
     const product = await containerCarritos.getById(+myId)
-    res.json(product)
+    res.json(product.productos)
 })
 
 routerCarrito.post('/:id/productos', async (req, res) => {
