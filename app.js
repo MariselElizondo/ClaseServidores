@@ -9,7 +9,8 @@ const app = express()
 const httpServer = new HttpServer(app)
 const ioServer = new IOServer(httpServer)
 const Contenedor = require("./Contenedor.js")
-let containerOne = new Contenedor('productos.txt')
+let containerProductos = new Contenedor('productos.txt')
+let containerCarritos = new Contenedor('carritos.txt')
 let listOfProducts = []
 let mail
 
@@ -49,7 +50,7 @@ ioServer.on('connection', (socket) => {
     socket.emit('lista-ingresando', listOfProducts)
     socket.on('new-product', data => {
         (JSON.parse(listOfProducts)).push(data)
-        containerOne.save(data)
+        containerProductos.save(data)
         ioServer.sockets.emit('product', data)
     })
     socket.on('new-user-mail', data => {
@@ -66,7 +67,7 @@ ioServer.on('connection', (socket) => {
 //MIDDLEWARES
 const validateProductExists = async(req, res, next) => { //Al que indiquemos
     const myId = req.params.id
-    const exist = await containerOne.getById(+myId)
+    const exist = await containerProductos.getById(+myId)
     if(exist){
         next()
     }else {
@@ -75,7 +76,7 @@ const validateProductExists = async(req, res, next) => { //Al que indiquemos
 }
 
 const refreshProducts = async(req, res, next) => { //Al que indiquemos
-    listOfProducts = await containerOne.getAll()
+    listOfProducts = await containerProductos.getAll()
     if(listOfProducts){
         next()
     }else {
@@ -93,61 +94,61 @@ const refreshProducts = async(req, res, next) => { //Al que indiquemos
 }) */
 
 routerProductos.get('/', async(req, res) => {
-    const allProducts = await containerOne.getAll(); 
+    const allProducts = await containerProductos.getAll(); 
     res.send(JSON.parse(allProducts))
 })
 
 routerProductos.get('/:id', validateProductExists, async (req, res) => {
     let myId = req.params.id
-    const product = await containerOne.getById(+myId)
+    const product = await containerProductos.getById(+myId)
     res.json(product)
 })
 
 routerProductos.post('/', async (req, res) => {
-    await containerOne.save(req.body)
+    await containerProductos.save(req.body)
     res.json(req.body)
 })
 
 routerProductos.put('/:id', validateProductExists, async(req, res) => {
     const myId = req.params.id
     console.log(req.body)
-    await containerOne.deleteById(+myId)
-    const updatedProduct = await containerOne.saveWithId(req.body, +myId)
+    await containerProductos.deleteById(+myId)
+    const updatedProduct = await containerProductos.saveWithId(req.body, +myId)
     res.send(updatedProduct)
 })
 
 routerProductos.delete('/:id', validateProductExists, async(req, res) => {
     const myId = req.params.id
-    await containerOne.deleteById(+myId)
+    await containerProductos.deleteById(+myId)
     res.send({"Response":"eliminado"})
 })
 
 /************************ CARRITO ************************/
 
 routerCarrito.post('/', async (req, res) => {
-    await containerOne.save(req.body)
+    await containerCarritos.save(req.body)
     res.json(req.body)
 })
 
 routerCarrito.delete('/:id', validateProductExists, async(req, res) => {
     const myId = req.params.id
-    await containerOne.deleteById(+myId)
+    await containerCarritos.deleteById(+myId)
     res.send({"Response":"eliminado"})
 })
 
 routerCarrito.get('/:id/productos', validateProductExists, async (req, res) => {
     let myId = req.params.id
-    const product = await containerOne.getById(+myId)
+    const product = await containerCarritos.getById(+myId)
     res.json(product)
 })
 
 routerCarrito.post('/:id/productos', async (req, res) => {
-    await containerOne.save(req.body)
+    await containerCarritos.save(req.body)
     res.json(req.body)
 })
 
 routerCarrito.delete('/:id/productos/:id_prod', validateProductExists, async(req, res) => {
     const myId = req.params.id
-    await containerOne.deleteById(+myId)
+    await containerCarritos.deleteById(+myId)
     res.send({"Response":"eliminado"})
 })
