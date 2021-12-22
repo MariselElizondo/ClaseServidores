@@ -13,6 +13,7 @@ let containerProductos = new Contenedor('productos.txt')
 let containerCarritos = new Contenedor('carritos.txt')
 let listOfProducts = []
 let mail
+let idCart;
 
 const fs = require('fs')
 
@@ -127,7 +128,8 @@ routerProductos.delete('/:id', validateProductExists, async(req, res) => {
 
 routerCarrito.post('/', async (req, res) => {
     await containerCarritos.save(req.body)
-    res.json(req.body)
+    idCart = req.body.id
+    res.json({"idNuevoCarrito": idCart})
 })
 
 routerCarrito.delete('/:id', validateProductExists, async(req, res) => {
@@ -138,12 +140,16 @@ routerCarrito.delete('/:id', validateProductExists, async(req, res) => {
 
 routerCarrito.get('/:id/productos', validateProductExists, async (req, res) => {
     let myId = req.params.id
-    const product = await containerCarritos.getById(+myId)
-    res.json(product.productos)
+    const cart = await containerCarritos.getById(+myId)
+    res.json(cart.productos)
 })
 
 routerCarrito.post('/:id/productos', async (req, res) => {
-    await containerCarritos.save(req.body)
+    let myId = req.params.id
+    const product = await containerProductos.getById(+myId)
+    const cart = await containerCarritos.saveProductCart(+myId, product)
+    
+    //await containerCarritos.save(req.body)
     res.json(req.body)
 })
 

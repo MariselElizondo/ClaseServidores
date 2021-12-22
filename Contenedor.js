@@ -1,8 +1,12 @@
 const fs = require('fs')
 
 class Contenedor {
+    
     constructor(fileName){
         this.fileName = fileName
+       /*  if(this.filename === "carritos.txt") {
+            this.productosCart = []
+        } */
     }
 
     //SAVE
@@ -22,6 +26,37 @@ class Contenedor {
             await fs.promises.writeFile(this.fileName, JSON.stringify(theContent))
             console.log('El objeto ', JSON.stringify(object), ' se ha agregado satisfactoriamente sobre ', this.fileName)
             return object.id              
+        }
+        catch (error) {
+            console.log('Error en save(): ', error)
+            return 0
+        }
+    }
+
+    async saveProductCart(idCart, product) {
+        try {
+            const responseCart = await this.getById(idCart)
+            console.log(responseCart, "-----responseCart")
+            console.log(idCart, "-----idCart")
+            console.log(product, "-----product")
+
+            let cartProducts = responseCart.productos
+            console.log(cartProducts, "-----cartProducts")
+
+            cartProducts.push(product)
+            console.log(cartProducts, "-----2222cartProducts")
+            /* if(responseCarts && responseCarts.length > 2){
+                carts = JSON.parse(responseCarts),
+                object.id = theContent[theContent.length - 1].id +1                   
+            } else {
+                theContent = JSON.parse('[]'),
+                object.id=  1
+            }
+            object.timestamp = Date.now()
+            theContent.push(object)
+            await fs.promises.writeFile(this.fileName, JSON.stringify(theContent))
+            console.log('El objeto ', JSON.stringify(object), ' se ha agregado satisfactoriamente sobre ', this.fileName)
+            return object.id          */     
         }
         catch (error) {
             console.log('Error en save(): ', error)
