@@ -45,6 +45,9 @@ class Contenedor {
 
             cartProducts.push(product)
             console.log(cartProducts, "-----2222cartProducts")
+            responseCart.products = cartProducts
+            await this.deleteById(idCart)
+            await this.saveWithId(responseCart, null) 
             /* if(responseCarts && responseCarts.length > 2){
                 carts = JSON.parse(responseCarts),
                 object.id = theContent[theContent.length - 1].id +1                   
@@ -69,13 +72,15 @@ class Contenedor {
         try {
             let theContent
             const response = await this.getAll()
+            console.log("RESPONSEEEE ", response)
             if(response){
                 theContent = JSON.parse(response)            
             } else {
                 theContent = JSON.parse('[]')
             }
-            object.id = id
+            id != null && (object.id = id)
             theContent.push(object)
+            console.log(theContent, "theContent")
             await fs.promises.writeFile(this.fileName, JSON.stringify(theContent))
             console.log('El objeto ', JSON.stringify(object), ' se ha agregado satisfactoriamente sobre ', this.fileName)
             return object              

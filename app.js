@@ -158,3 +158,8 @@ routerCarrito.delete('/:id/productos/:id_prod', validateProductExists, async(req
     await containerCarritos.deleteById(+myId)
     res.send({"Response":"eliminado"})
 })
+
+routerCarrito.get('/carritos', async (req, res) => {
+    const allCarts = await containerCarritos.getAll(); 
+    res.send(JSON.parse(allCarts))
+})
