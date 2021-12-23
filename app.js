@@ -14,7 +14,7 @@ let containerCarritos = new Contenedor('carritos.txt')
 let listOfProducts = []
 let mail
 let idCart;
-let administrador = true
+let administrador = false
 
 const fs = require('fs')
 
@@ -43,9 +43,7 @@ app.use('/api/carrito', routerCarrito)
 
 //MANEJO DE RUTAS DE ERROR
 app.use(( req, res, next) => {
-    let ruta = "x"
-    let metodo = "y"
-    let desc = "ruta " + ruta + " método " + metodo +" no implementada"  
+    let desc = "ruta: " + req._parsedUrl.pathname + " con método " + req.method +" no implementado"  
     res.send({error: -2, descripcion: desc})
 })
 
@@ -79,9 +77,7 @@ const validateAdministrator = async(req, res, next) => { //Al que indiquemos
     if(administrador){
         next()
     }else {
-        let ruta = "x"
-        let metodo = "y"
-        let desc = "ruta " + ruta + " método " + metodo +" no autorizada"  
+        let desc = "ruta " + req.originalUrl + " con método " + req.method +" no autorizado"  
         res.send({error: -1, descripcion: desc})
     }
 }
@@ -129,7 +125,6 @@ routerProductos.post('/', validateAdministrator, async (req, res) => {
 
 routerProductos.put('/:id', validateAdministrator, validateProductExists, async(req, res) => {
     const myId = req.params.id
-    console.log(req.body)
     await containerProductos.deleteById(+myId)
     const updatedProduct = await containerProductos.saveWithId(req.body, +myId)
     res.send(updatedProduct)
