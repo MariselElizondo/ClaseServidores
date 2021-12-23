@@ -14,28 +14,11 @@ let containerCarritos = new Contenedor('carritos.txt')
 let listOfProducts = []
 let mail
 let idCart;
-let administrador = false
-
-const fs = require('fs')
-
-async function saveChat(data) {
-    try {
-        await fs.promises.appendFile('chat.txt', JSON.stringify(data))           
-    }
-    catch (error) {
-        console.log('Error en al guardar el chat en el servidor: ', error)
-    }
-}
+let administrador = false //Cambiar a true para ver funcionalidad restante
 
 //CONFIGURACIONES
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
-app.set('views', './views')
-app.set('view engine', 'ejs')
-
-//STATICS FILE
-app.use(express.static(__dirname + '/public'))
-app.use(express.static(__dirname + '/views'))
 
 //RUTA BASE
 app.use('/api/productos', routerProductos)
@@ -107,9 +90,6 @@ const refreshProducts = async(req, res, next) => { //Al que indiquemos
 routerProductos.get('/', refreshProducts, async(req, res) => {
     const allProducts = await containerProductos.getAll(); 
     res.send(JSON.parse(allProducts))
-    /* return res.render('form', {
-        list: JSON.parse(listOfProducts)
-    }) */
 })
 
 routerProductos.get('/:id', validateProductExists, async (req, res) => {

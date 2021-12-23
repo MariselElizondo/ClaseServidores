@@ -56,6 +56,7 @@ class Contenedor {
                 theContent = JSON.parse('[]')
             }
             object.id = id
+            object.timestamp = Date.now()
             theContent.push(object)
             await fs.promises.writeFile(this.fileName, JSON.stringify(theContent))
             console.log('El objeto ', JSON.stringify(object), ' se ha agregado satisfactoriamente sobre ', this.fileName)
