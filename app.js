@@ -170,7 +170,8 @@ routerCarrito.post('/:id/productos', async (req, res) => {
 
 routerCarrito.delete('/:id/productos/:id_prod', validateProductExists, async(req, res) => {
     const myId = req.params.id
-    await containerCarritos.deleteById(+myId)
+    const myId_prod = req.params.id_prod
+    await containerCarritos.deleteProductOfCart(+myId_prod,+myId)
     res.send({"Response":"eliminado"})
 })
 

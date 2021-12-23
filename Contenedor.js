@@ -4,12 +4,9 @@ class Contenedor {
     
     constructor(fileName){
         this.fileName = fileName
-       /*  if(this.filename === "carritos.txt") {
-            this.productosCart = []
-        } */
     }
 
-    //SAVE
+    //SAVE GENERAL
     async save(object) {
         try {
             let theContent
@@ -33,6 +30,7 @@ class Contenedor {
         }
     }
 
+    //SAVE UN PRODUCTO EN EL CARRITO
     async saveProductCart(idCart, product) {
         try {
             const responseCart = await this.getById(idCart)
@@ -69,7 +67,7 @@ class Contenedor {
         }
     }
 
-    //SAVE WITH ID
+    //SAVE A PARTIR DE ÍTEM
     async reSaveCart(object) {
         try {
             let theContent
@@ -88,7 +86,6 @@ class Contenedor {
     async getById(number) {
         try {
             const response = await this.getAll()
-            console.log(JSON.parse(response), 'res')
             let match
             response 
             ?  match = JSON.parse(response)?.find( index => index.id === number ) || null
@@ -104,9 +101,6 @@ class Contenedor {
     async getAll() {
         try {
             const response = await fs.promises.readFile(this.fileName,'utf-8')
-            /* response.length === 0 
-            ? console.log(this.fileName, ' está vacío')
-            : console.log(JSON.parse(response)) */
             return response
         } catch (error) {
             console.log('Error en getAll(): ', error)
@@ -133,6 +127,26 @@ class Contenedor {
             console.log('Se ha limpiado correctamente el archivo')
         } catch (error) {
             console.log('Error en deleteAll(): ', error)
+        }
+    }
+
+    //DELETE PRODUCT X OF CART Y
+    async deleteProductOfCart(numProduct, numCart) {
+        try {
+            const responseCart = await this.getById(numCart)
+            let cartProducts = responseCart.productos
+            const filteredProducts = cartProducts.filter(elem => elem.id != numProduct)
+            let newCart = { 
+                "productos":filteredProducts,
+                "id":responseCart.id, 
+                "timestamp":responseCart.timestamp
+            }
+            const responseReSave = await this.reSaveCart(newCart)
+            return responseReSave        
+        }
+        catch (error) {
+            console.log('Error en save(): ', error)
+            return 0
         }
     }
     
