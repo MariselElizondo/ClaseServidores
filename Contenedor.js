@@ -36,30 +36,10 @@ class Contenedor {
     async saveProductCart(idCart, product) {
         try {
             const responseCart = await this.getById(idCart)
-            console.log(responseCart, "-----responseCart")
-            console.log(idCart, "-----idCart")
-            console.log(product, "-----product")
-
             let cartProducts = responseCart.productos
-            console.log(cartProducts, "-----cartProducts")
-
             cartProducts.push(product)
-            console.log(cartProducts, "-----2222cartProducts")
-            responseCart.products = cartProducts
-            await this.deleteById(idCart)
-            await this.saveWithId(responseCart, null) 
-            /* if(responseCarts && responseCarts.length > 2){
-                carts = JSON.parse(responseCarts),
-                object.id = theContent[theContent.length - 1].id +1                   
-            } else {
-                theContent = JSON.parse('[]'),
-                object.id=  1
-            }
-            object.timestamp = Date.now()
-            theContent.push(object)
-            await fs.promises.writeFile(this.fileName, JSON.stringify(theContent))
-            console.log('El objeto ', JSON.stringify(object), ' se ha agregado satisfactoriamente sobre ', this.fileName)
-            return object.id          */     
+            const responseReSave = await this.reSaveCart(responseCart)
+            return responseReSave        
         }
         catch (error) {
             console.log('Error en save(): ', error)
@@ -72,15 +52,13 @@ class Contenedor {
         try {
             let theContent
             const response = await this.getAll()
-            console.log("RESPONSEEEE ", response)
             if(response){
                 theContent = JSON.parse(response)            
             } else {
                 theContent = JSON.parse('[]')
             }
-            id != null && (object.id = id)
+            object.id = id
             theContent.push(object)
-            console.log(theContent, "theContent")
             await fs.promises.writeFile(this.fileName, JSON.stringify(theContent))
             console.log('El objeto ', JSON.stringify(object), ' se ha agregado satisfactoriamente sobre ', this.fileName)
             return object              
@@ -91,10 +69,26 @@ class Contenedor {
         }
     }
 
+    //SAVE WITH ID
+    async reSaveCart(object) {
+        try {
+            let theContent
+            theContent = JSON.parse('[]')
+            theContent.push(object)
+            await fs.promises.writeFile(this.fileName, JSON.stringify(theContent)) 
+            return theContent             
+        }
+        catch (error) {
+            console.log('Error en reSaveCart(): ', error)
+            return null
+        }
+    }
+
     //GET BY ID
     async getById(number) {
         try {
             const response = await this.getAll()
+            console.log(JSON.parse(response), 'res')
             let match
             response 
             ?  match = JSON.parse(response)?.find( index => index.id === number ) || null
