@@ -41,6 +41,14 @@ app.use(express.static(__dirname + '/views'))
 app.use('/api/productos', routerProductos)
 app.use('/api/carrito', routerCarrito)
 
+//MANEJO DE RUTAS DE ERROR
+app.use(( req, res, next) => {
+    let ruta = "x"
+    let metodo = "y"
+    let desc = "ruta " + ruta + " método " + metodo +" no implementada"  
+    res.send({error: -2, descripcion: desc})
+})
+
 //SERVIDOR
 httpServer.listen(process.env.PORT || 8080, () => {
     console.log("SERVER ON PORT 8080");
@@ -100,15 +108,12 @@ const refreshProducts = async(req, res, next) => { //Al que indiquemos
 //RUTAS
 
 /*********************** PRODUCTOS ***********************/
-/* routerProductos.get('/', refreshProducts,  (req, res) => {
-    return res.render('form', {
-        list: JSON.parse(listOfProducts)
-    })
-}) */
-
-routerProductos.get('/', async(req, res) => {
+routerProductos.get('/', refreshProducts, async(req, res) => {
     const allProducts = await containerProductos.getAll(); 
     res.send(JSON.parse(allProducts))
+    /* return res.render('form', {
+        list: JSON.parse(listOfProducts)
+    }) */
 })
 
 routerProductos.get('/:id', validateProductExists, async (req, res) => {
