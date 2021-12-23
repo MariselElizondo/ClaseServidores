@@ -14,7 +14,7 @@ let containerCarritos = new Contenedor('carritos.txt')
 let listOfProducts = []
 let mail
 let idCart;
-let administrador = false
+let administrador = true
 
 const fs = require('fs')
 
@@ -171,7 +171,7 @@ routerCarrito.delete('/:id/productos/:id_prod', validateProductExists, async(req
     res.send({"Response":"eliminado"})
 })
 
-routerCarrito.get('/carritos', async (req, res) => {
-    const allCarts = await containerCarritos.getAll(); 
-    res.send(JSON.parse(allCarts))
+routerCarrito.get('/', async (req, res) => {
+    const myCart = await containerCarritos.getById(+idCart)
+    res.send(myCart)
 })
