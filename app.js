@@ -14,6 +14,7 @@ let containerCarritos = new Contenedor('carritos.txt')
 let listOfProducts = []
 let mail
 let idCart;
+let administrador = false
 
 const fs = require('fs')
 
@@ -66,6 +67,17 @@ ioServer.on('connection', (socket) => {
 })
 
 //MIDDLEWARES
+const validateAdministrator = async(req, res, next) => { //Al que indiquemos
+    if(administrador){
+        next()
+    }else {
+        let ruta = "x"
+        let metodo = "y"
+        let desc = "ruta " + ruta + " método " + metodo +" no autorizada"  
+        res.send({error: -1, descripcion: desc})
+    }
+}
+
 const validateProductExists = async(req, res, next) => { //Al que indiquemos
     const myId = req.params.id
     const exist = await containerProductos.getById(+myId)
@@ -105,12 +117,12 @@ routerProductos.get('/:id', validateProductExists, async (req, res) => {
     res.json(product)
 })
 
-routerProductos.post('/', async (req, res) => {
+routerProductos.post('/', validateAdministrator, async (req, res) => {
     await containerProductos.save(req.body)
     res.json(req.body)
 })
 
-routerProductos.put('/:id', validateProductExists, async(req, res) => {
+routerProductos.put('/:id', validateAdministrator, validateProductExists, async(req, res) => {
     const myId = req.params.id
     console.log(req.body)
     await containerProductos.deleteById(+myId)
@@ -118,7 +130,7 @@ routerProductos.put('/:id', validateProductExists, async(req, res) => {
     res.send(updatedProduct)
 })
 
-routerProductos.delete('/:id', validateProductExists, async(req, res) => {
+routerProductos.delete('/:id', validateAdministrator, validateProductExists, async(req, res) => {
     const myId = req.params.id
     await containerProductos.deleteById(+myId)
     res.send({"Response":"eliminado"})
